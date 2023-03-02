@@ -103,6 +103,7 @@ fn get_scene(args: &Args, neuron: SWC) -> Arc<dyn Scene> {
         }
         _ => panic!("invalid mode"),
     }
+    scene.build_bvh();
     Arc::new(scene)
 }
 

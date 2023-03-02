@@ -1,6 +1,6 @@
 use std::{
     cmp::PartialOrd,
-    ops::{Add, Mul, Sub},
+    ops::{Add, Div, Mul, Sub},
 };
 
 pub type Vec3f = Vec3<f32>;
@@ -47,56 +47,72 @@ impl Vec3f {
 impl<T: Add<Output = T> + Copy> Add<T> for Vec3<T> {
     type Output = Vec3<T>;
 
-    fn add(self, _rhs: T) -> Vec3<T> {
-        Vec3::new(self.x + _rhs, self.y + _rhs, self.z + _rhs)
+    fn add(self, rhs: T) -> Vec3<T> {
+        Vec3::new(self.x + rhs, self.y + rhs, self.z + rhs)
     }
 }
 
 impl<T: Add<Output = T>> Add<Vec3<T>> for Vec3<T> {
     type Output = Vec3<T>;
 
-    fn add(self, _rhs: Vec3<T>) -> Vec3<T> {
-        Vec3::new(self.x + _rhs.x, self.y + _rhs.y, self.z + _rhs.z)
+    fn add(self, rhs: Vec3<T>) -> Vec3<T> {
+        Vec3::new(self.x + rhs.x, self.y + rhs.y, self.z + rhs.z)
     }
 }
 
 impl<T: Sub<Output = T> + Copy> Sub<T> for Vec3<T> {
     type Output = Vec3<T>;
 
-    fn sub(self, _rhs: T) -> Vec3<T> {
-        Vec3::new(self.x - _rhs, self.y - _rhs, self.z - _rhs)
+    fn sub(self, rhs: T) -> Vec3<T> {
+        Vec3::new(self.x - rhs, self.y - rhs, self.z - rhs)
     }
 }
 
 impl<T: Sub<Output = T>> Sub<Vec3<T>> for Vec3<T> {
     type Output = Vec3<T>;
 
-    fn sub(self, _rhs: Vec3<T>) -> Vec3<T> {
-        Vec3::new(self.x - _rhs.x, self.y - _rhs.y, self.z - _rhs.z)
+    fn sub(self, rhs: Vec3<T>) -> Vec3<T> {
+        Vec3::new(self.x - rhs.x, self.y - rhs.y, self.z - rhs.z)
     }
 }
 
 impl<T: Mul<Output = T> + Copy> Mul<T> for Vec3<T> {
     type Output = Vec3<T>;
 
-    fn mul(self, _rhs: T) -> Vec3<T> {
-        Vec3::new(self.x * _rhs, self.y * _rhs, self.z * _rhs)
+    fn mul(self, rhs: T) -> Vec3<T> {
+        Vec3::new(self.x * rhs, self.y * rhs, self.z * rhs)
     }
 }
 
 impl<T: Mul<Output = T>> Mul<Vec3<T>> for Vec3<T> {
     type Output = Vec3<T>;
 
-    fn mul(self, _rhs: Vec3<T>) -> Vec3<T> {
-        Vec3::new(self.x * _rhs.x, self.y * _rhs.y, self.z * _rhs.z)
+    fn mul(self, rhs: Vec3<T>) -> Vec3<T> {
+        Vec3::new(self.x * rhs.x, self.y * rhs.y, self.z * rhs.z)
     }
 }
 
 impl<T: Mul<Output = T> + Copy> Mul<&Vec3<T>> for Vec3<T> {
     type Output = Vec3<T>;
 
-    fn mul(self, _rhs: &Vec3<T>) -> Vec3<T> {
-        Vec3::new(self.x * _rhs.x, self.y * _rhs.y, self.z * _rhs.z)
+    fn mul(self, rhs: &Vec3<T>) -> Vec3<T> {
+        Vec3::new(self.x * rhs.x, self.y * rhs.y, self.z * rhs.z)
+    }
+}
+
+impl<T: Div<Output = T> + Copy> Div<T> for Vec3<T> {
+    type Output = Vec3<T>;
+
+    fn div(self, rhs: T) -> Vec3<T> {
+        Vec3::new(self.x / rhs, self.y / rhs, self.z / rhs)
+    }
+}
+
+impl<T: Div<Output = T>> Div<Vec3<T>> for Vec3<T> {
+    type Output = Vec3<T>;
+
+    fn div(self, rhs: Vec3<T>) -> Vec3<T> {
+        Vec3::new(self.x / rhs.x, self.y / rhs.y, self.z / rhs.z)
     }
 }
 

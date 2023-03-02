@@ -1,3 +1,4 @@
+mod accelerator;
 mod anti_aliasing;
 mod material;
 mod object;
