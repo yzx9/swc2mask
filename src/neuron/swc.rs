@@ -26,8 +26,6 @@ const ROOT_ID: i32 = 1;
 impl SWC {
     pub fn read(fname: &str) -> Result<Self, Box<dyn Error>> {
         let fname = fs::canonicalize(&PathBuf::from(fname))?;
-        println!("read swc: {}", fname.to_str().unwrap_or("unknown"));
-
         let file = File::open(fname)?;
         let mut nodes = HashMap::<i32, Rc<RefCell<Node>>>::new();
         for line in BufReader::new(file).lines() {

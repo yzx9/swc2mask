@@ -68,6 +68,9 @@ fn main() {
 }
 
 fn get_neuron(args: &Args) -> SWC {
+    if !args.silent {
+        println!("read swc: {}", args.input);
+    }
     let neuron = SWC::read(&args.input).expect("fails to read swc");
     if let Some(r) = args.reset_radius {
         set_radius_dfs(&neuron.root, r);
