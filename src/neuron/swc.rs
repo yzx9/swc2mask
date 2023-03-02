@@ -79,14 +79,20 @@ impl SWC {
         Self::_node(self.root.clone(), id)
     }
 
-    pub fn sdf(&self) -> Arc<dyn Object> {
+    pub fn sdf(&self) -> Vec<Arc<dyn Object>> {
         self.sdf_with_material(SolidColor::new(Vec3f::new(1.0, 1.0, 1.0)))
     }
 
-    pub fn sdf_with_material(&self, material: Arc<dyn Material>) -> Arc<dyn Object> {
+    pub fn sdf_with_material(&self, material: Arc<dyn Material>) -> Vec<Arc<dyn Object>> {
+        let mut out = vec![];
         let n = &self.root.borrow();
-        let sdf = Self::_sdf_with_material(n).unwrap_or(Box::new(Sphere::new(n.xyz(), n.radius)));
-        SDFObject::new(Box::from(sdf), material)
+        Self::_sdf_with_material(n, material.clone(), &mut out);
+        if out.len() == 0 {
+            let sphere = Sphere::new(n.xyz(), n.radius);
+            let obj = SDFObject::new(Box::from(sphere), material);
+            out.push(obj);
+        }
+        out
     }
 
     pub fn sdf_with_path_decay<F>(&self, decay_fn: F) -> Vec<Arc<dyn Object>>
@@ -110,13 +116,15 @@ impl SWC {
         None
     }
 
-    fn _sdf_with_material(n: &Node) -> Option<Box<dyn SDF>> {
-        n.children.iter().fold(None, |sdf, c| {
+    fn _sdf_with_material(n: &Node, material: Arc<dyn Material>, out: &mut Vec<Arc<dyn Object>>) {
+        for c in n.children.iter() {
             let c = c.borrow();
-            let link = Box::new(RoundCone::new(n.xyz(), n.radius, c.xyz(), c.radius));
-            let child = Min::compose(Some(link), Self::_sdf_with_material(&c));
-            Min::compose(sdf, child)
-        })
+            let link = RoundCone::new(n.xyz(), n.radius, c.xyz(), c.radius);
+            let obj = SDFObject::new(Box::from(link), material.clone());
+            out.push(obj);
+
+            Self::_sdf_with_material(&c, material.clone(), out);
+        }
     }
 }
 

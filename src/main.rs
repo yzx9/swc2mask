@@ -80,28 +80,27 @@ fn get_neuron(args: &Args) -> SWC {
 
 fn get_scene(args: &Args, neuron: SWC) -> Arc<dyn Scene> {
     let mut scene = ObjectsScene::new();
-    match args.mode.as_str() {
-        "solid_color" => {
-            scene.add(neuron.sdf());
-        }
+    let sdfs = match args.mode.as_str() {
+        "solid_color" => neuron.sdf(),
         "path_decay" => {
             let s = Vec3f::new(0.0, 0.0, 0.0);
             let e = Vec3f::new(1.0, 1.0, 1.0);
             let decay = args.decay.expect("missing decay arg");
             let decay_fn = |a| vec::interpolate(s, e, a / decay);
-            let sdfs = match args.node {
+            match args.node {
                 Some(id) => {
                     let n = neuron.node(id).expect("node not found");
                     let n = n.borrow();
                     n.sdf_with_path_decay(decay_fn)
                 }
                 None => neuron.sdf_with_path_decay(decay_fn),
-            };
-            for sdf in sdfs {
-                scene.add(sdf);
             }
         }
         _ => panic!("invalid mode"),
+    };
+
+    for sdf in sdfs {
+        scene.add(sdf);
     }
     scene.build_bvh();
     Arc::new(scene)
