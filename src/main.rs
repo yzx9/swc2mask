@@ -29,8 +29,8 @@ struct Args {
     #[arg(long, default_value_t = 1)]
     msaa: i32,
 
-    #[arg(long, default_value_t = true)]
-    verbose: bool,
+    #[arg(long, default_value_t = false)]
+    silent: bool,
 
     #[arg(long)]
     reset_radius: Option<f32>,
@@ -124,7 +124,7 @@ fn get_renderer(args: &Args, scene: Arc<dyn Scene>) -> Box<dyn Renderer> {
 
 fn get_writer(args: &Args, renderer: Box<dyn Renderer>) -> TiffWriter {
     let mut w = TiffWriter::new(Box::from(renderer));
-    w.set_verbose(args.verbose);
+    w.set_verbose(!args.silent);
     w
 }
 
