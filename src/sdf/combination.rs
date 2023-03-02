@@ -34,9 +34,9 @@ impl SDF for Min {
         self.bounding_box
     }
 
-    // TODO: Can a trait be extracted to allow `is_in` to be reused?
-    fn is_in(&self, p: Vec3f) -> bool {
-        self.is_in_bounding_box(p) && (self.a.is_in(p) || self.b.is_in(p))
+    // TODO: Can a trait be extracted to allow `isin` to be reused?
+    fn isin(&self, p: Vec3f) -> bool {
+        self.isin_bounding_box(p) && (self.a.isin(p) || self.b.isin(p))
     }
 
     fn hit(&self, p: Vec3f) -> Hit {

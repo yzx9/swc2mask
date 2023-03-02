@@ -11,13 +11,13 @@ pub trait SDF: Sync + Send {
         }
     }
 
-    fn is_in(&self, p: Vec3f) -> bool {
-        self.is_in_bounding_box(p) && self.signed_distance(p) < 0.0
+    fn isin(&self, p: Vec3f) -> bool {
+        self.isin_bounding_box(p) && self.signed_distance(p) < 0.0
     }
 
     fn bounding_box(&self) -> (Vec3f, Vec3f);
 
-    fn is_in_bounding_box(&self, p: Vec3f) -> bool {
+    fn isin_bounding_box(&self, p: Vec3f) -> bool {
         let (min, max) = self.bounding_box();
         p.x >= min.x && p.y >= min.y && p.z >= min.z && p.x <= max.x && p.y <= max.y && p.z <= max.z
     }
