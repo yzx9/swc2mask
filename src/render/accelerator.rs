@@ -27,7 +27,7 @@ impl BVH {
 impl Accelerator for BVH {
     fn hit(&self, p: Vec3f) -> Option<Vec3f> {
         match &self.root {
-            Some(r) => r.hit(p).and_then(|idx| self.objects[idx].hit(p)),
+            Some(r) => r.hit(p).find_map(|idx| self.objects[idx].hit(p)),
             None => None,
         }
     }
@@ -93,23 +93,39 @@ impl BVHNode {
         }
     }
 
-    fn hit(&self, p: Vec3f) -> Option<usize> {
-        match self.isin(p) {
-            true if self.n == 1 => Some(self.index),
-            true => {
-                if let Some((left, right)) = &self.children {
-                    left.hit(p).or_else(|| right.hit(p))
-                } else {
-                    None
-                }
-            }
-            _ => None,
-        }
+    fn hit(&self, p: Vec3f) -> BVHHitIter {
+        BVHHitIter { s: vec![&self], p }
     }
 
     fn isin(&self, p: Vec3f) -> bool {
         let (min, max) = self.bounding_box;
         p.x >= min.x && p.y >= min.y && p.z >= min.z && p.x <= max.x && p.y <= max.y && p.z <= max.z
+    }
+}
+
+struct BVHHitIter<'a> {
+    s: Vec<&'a BVHNode>,
+    p: Vec3f,
+}
+
+impl<'a> Iterator for BVHHitIter<'a> {
+    type Item = usize;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        while let Some(node) = self.s.pop() {
+            match node.isin(self.p) {
+                true if node.n == 1 => return Some(node.index),
+                true => {
+                    if let Some((left, right)) = &node.children {
+                        self.s.push(&left);
+                        self.s.push(&right);
+                    };
+                }
+                _ => (),
+            }
+        }
+
+        None
     }
 }
 
