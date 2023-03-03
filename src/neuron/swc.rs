@@ -1,7 +1,7 @@
 use super::{error_kind::RootNotFoundError, node::Node};
 use crate::{
     render::{Material, Object, SDFObject, SolidColor},
-    sdf::{Min, RoundCone, Sphere, SDF},
+    sdf::{RoundCone, Sphere, SDF},
     vec::Vec3f,
 };
 use std::{
@@ -119,8 +119,14 @@ impl SWC {
     fn _sdf_with_material(n: &Node, material: Arc<dyn Material>, out: &mut Vec<Arc<dyn Object>>) {
         for c in n.children.iter() {
             let c = c.borrow();
-            let link = RoundCone::new(n.xyz(), n.radius, c.xyz(), c.radius);
-            let obj = SDFObject::new(Box::from(link), material.clone());
+            let sdf: Box<dyn SDF> = if (n.xyz() - c.xyz()).norm() > f32::abs(n.radius - c.radius) {
+                Box::from(RoundCone::new(n.xyz(), n.radius, c.xyz(), c.radius))
+            } else if n.radius > c.radius {
+                Box::from(Sphere::new(n.xyz(), n.radius))
+            } else {
+                Box::from(Sphere::new(c.xyz(), c.radius))
+            };
+            let obj = SDFObject::new(sdf, material.clone());
             out.push(obj);
 
             Self::_sdf_with_material(&c, material.clone(), out);
