@@ -30,7 +30,7 @@ struct Args {
     msaa: i32,
 
     #[arg(long, default_value_t = false)]
-    silent: bool,
+    verbose: bool,
 
     #[arg(long)]
     reset_radius: Option<f32>,
@@ -68,7 +68,7 @@ fn main() {
 }
 
 fn get_neuron(args: &Args) -> SWC {
-    if !args.silent {
+    if args.verbose {
         println!("read swc: {}", args.input);
     }
     let neuron = SWC::read(&args.input).expect("fails to read swc");
@@ -127,7 +127,7 @@ fn get_renderer(args: &Args, scene: Arc<dyn Scene>) -> Box<dyn Renderer> {
 
 fn get_writer(args: &Args, renderer: Box<dyn Renderer>) -> TiffWriter {
     let mut w = TiffWriter::new(Box::from(renderer));
-    w.set_verbose(!args.silent);
+    w.set_verbose(args.verbose);
     w
 }
 
