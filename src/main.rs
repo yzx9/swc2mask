@@ -148,7 +148,7 @@ fn set_resolution<'a>(
         .map(|a| a.parse::<f32>().unwrap())
         .collect();
     if res.len() != 3 {
-        return Err("invalid range");
+        return Err("invalid resolution");
     }
 
     renderer.set_resolution(res[0], res[1], res[2]);
