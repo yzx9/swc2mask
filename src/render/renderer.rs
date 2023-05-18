@@ -1,10 +1,7 @@
 use super::{anti_aliasing::MSAA_OPTIONS, Msaa, Scene};
 use crate::vec::Vec3f;
 use image::{ImageBuffer, Luma};
-use std::{
-    sync::{mpsc, Arc},
-    thread,
-};
+use std::sync::{mpsc, Arc};
 use threadpool::ThreadPool;
 
 pub type Image = image::ImageBuffer<Luma<u8>, Vec<u8>>;
@@ -120,7 +117,7 @@ impl Iterator for ImageStackRendererIterator<'_> {
 
             let tx = tx.clone();
             let scene = Arc::clone(&self.renderer.scene);
-            thread::spawn(move || {
+            self.pool.execute(move || {
                 let img = ImageBuffer::from_fn(w, h, |x, y| {
                     let p = Vec3f::new(mx + r.x * x as f32, my + r.y * (h - y) as f32, z);
                     let luma = msaa
