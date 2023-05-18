@@ -8,7 +8,7 @@ pub struct Min {
 }
 
 impl Min {
-    pub fn new(a: Box<dyn SDF>, b: Box<dyn SDF>) -> Min {
+    pub fn _new(a: Box<dyn SDF>, b: Box<dyn SDF>) -> Min {
         let (min_a, max_a) = a.bounding_box();
         let (min_b, max_b) = b.bounding_box();
         let bounding_box = (vec::minimum(min_a, min_b), vec::maximum(max_a, max_b));
@@ -16,9 +16,9 @@ impl Min {
     }
 
     // TODO: Can a trait be extracted to allow `compose` to be reused?
-    pub fn compose(a: Option<Box<dyn SDF>>, b: Option<Box<dyn SDF>>) -> Option<Box<dyn SDF>> {
+    pub fn _compose(a: Option<Box<dyn SDF>>, b: Option<Box<dyn SDF>>) -> Option<Box<dyn SDF>> {
         if a.is_some() && b.is_some() {
-            Some(Box::new(Self::new(a.unwrap(), b.unwrap())))
+            Some(Box::new(Self::_new(a.unwrap(), b.unwrap())))
         } else {
             a.or(b)
         }

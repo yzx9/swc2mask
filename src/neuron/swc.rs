@@ -76,7 +76,7 @@ impl SWC {
     }
 
     pub fn node(&self, id: i32) -> Option<Rc<RefCell<Node>>> {
-        Self::_node(self.root.clone(), id)
+        Self::node_impl(self.root.clone(), id)
     }
 
     pub fn sdf(&self) -> Vec<Arc<dyn Object>> {
@@ -86,7 +86,7 @@ impl SWC {
     pub fn sdf_with_material(&self, material: Arc<dyn Material>) -> Vec<Arc<dyn Object>> {
         let mut out = vec![];
         let n = &self.root.borrow();
-        Self::_sdf_with_material(n, material.clone(), &mut out);
+        Self::sdf_with_material_impl(n, material.clone(), &mut out);
         if out.len() == 0 {
             let sphere = Sphere::new(n.xyz(), n.radius);
             let obj = SDFObject::new(Box::from(sphere), material);
@@ -102,21 +102,25 @@ impl SWC {
         self.root.borrow().sdf_with_path_decay(decay_fn)
     }
 
-    fn _node(n: Rc<RefCell<Node>>, id: i32) -> Option<Rc<RefCell<Node>>> {
+    fn node_impl(n: Rc<RefCell<Node>>, id: i32) -> Option<Rc<RefCell<Node>>> {
         let nn = n.borrow();
         if nn.id == id {
             return Some(n.clone());
         }
 
         for c in &nn.children {
-            if let Some(a) = Self::_node(c.clone(), id) {
+            if let Some(a) = Self::node_impl(c.clone(), id) {
                 return Some(a);
             }
         }
         None
     }
 
-    fn _sdf_with_material(n: &Node, material: Arc<dyn Material>, out: &mut Vec<Arc<dyn Object>>) {
+    fn sdf_with_material_impl(
+        n: &Node,
+        material: Arc<dyn Material>,
+        out: &mut Vec<Arc<dyn Object>>,
+    ) {
         for c in n.children.iter() {
             let c = c.borrow();
             let sdf: Box<dyn SDF> = if (n.xyz() - c.xyz()).norm() > f32::abs(n.radius - c.radius) {
@@ -129,7 +133,7 @@ impl SWC {
             let obj = SDFObject::new(sdf, material.clone());
             out.push(obj);
 
-            Self::_sdf_with_material(&c, material.clone(), out);
+            Self::sdf_with_material_impl(&c, material.clone(), out);
         }
     }
 }

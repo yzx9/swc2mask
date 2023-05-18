@@ -37,15 +37,15 @@ impl Node {
         self.parent.upgrade()
     }
 
-    pub fn is_termination(&self) -> bool {
+    pub fn _is_termination(&self) -> bool {
         self.children.len() == 0
     }
 
-    pub fn is_elongation(&self) -> bool {
+    pub fn _is_elongation(&self) -> bool {
         self.children.len() == 1
     }
 
-    pub fn is_bifurcation(&self) -> bool {
+    pub fn _is_bifurcation(&self) -> bool {
         self.children.len() > 1
     }
 
@@ -63,11 +63,11 @@ impl Node {
         let mut visited = HashSet::new();
         visited.insert(self.id);
         let mut out = vec![];
-        Self::_sdf_with_path_decay(&self, &decay_fn, 0.0, &mut visited, &mut out);
+        Self::sdf_with_path_decay_impl(&self, &decay_fn, 0.0, &mut visited, &mut out);
         out
     }
 
-    fn _sdf_with_path_decay<F>(
+    fn sdf_with_path_decay_impl<F>(
         &self,
         decay_fn: &F,
         cur: f32,
@@ -103,7 +103,7 @@ impl Node {
                 out.push(obj);
             }
 
-            Self::_sdf_with_path_decay(&n, decay_fn, acc, visited, out);
+            Self::sdf_with_path_decay_impl(&n, decay_fn, acc, visited, out);
         }
     }
 }

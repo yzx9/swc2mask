@@ -23,7 +23,7 @@ impl<T> Vec3<T> {
 }
 
 impl<T: Add<Output = T> + Mul<Output = T>> Vec3<T> {
-    pub fn dot(self, b: Vec3<T>) -> T {
+    pub fn _dot(self, b: Vec3<T>) -> T {
         dot(self, b)
     }
 }
@@ -39,7 +39,7 @@ impl Vec3f {
         norm(self)
     }
 
-    pub fn interpolate(self, v: Vec3f, k: f32) -> Vec3f {
+    pub fn _interpolate(self, v: Vec3f, k: f32) -> Vec3f {
         interpolate(self, v, k)
     }
 }
