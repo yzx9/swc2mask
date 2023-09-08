@@ -13,7 +13,7 @@ swc2skeleton --output=/path/to/tif /path/to/your/swc
 Render a neuron image stack, with 8-levels of brightness.
 
 ```bash
-swc2skeleton --mass=8 --output=/path/to/tif /path/to/your/swc
+swc2skeleton --msaa=8 --output=/path/to/tif /path/to/your/swc
 ```
 
 Renders part of a neuron image stack.
