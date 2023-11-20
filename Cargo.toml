@@ -1,5 +1,5 @@
 [package]
-name = "swc2skeleton"
+name = "swc2mask"
 version = "0.3.0"
 edition = "2021"
 
