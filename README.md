@@ -1,6 +1,6 @@
 :star: :star: :star: **Notes** :star: :star: :star:
 
-**This project is now deprecated. We recommend using the Python script `swcgeom.transforms.ToImageStack` instead. It offers a straightforward API that is consistent with this project, and it leverages `sdflit`, incorporating the core codebase of this project for enhanced functionality.**
+**This project is now deprecated. We recommend using the Python script [`swcgeom.transforms.ToImageStack`](https://github.com/yzx9/swcgeom) instead. It offers a straightforward API that is consistent with this project, and it leverages [`sdflit`](https://github.com/yzx9/sdflit), incorporating the core codebase of this project for enhanced functionality.**
 
 ---
 
