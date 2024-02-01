@@ -1,3 +1,7 @@
+:star: :star: :star: **This project is now deprecated. We recommend using the Python script `swcgeom.transforms.ToImageStack` instead. It offers a straightforward API that is consistent with this project, and it leverages `sdflit`, incorporating the core codebase of this project for enhanced functionality.** :star: :star: :star:
+
+---
+
 # SWC2MSAK
 
 Render neuron to mask 3d image stack.
